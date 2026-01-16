@@ -5,7 +5,7 @@
 
 - [Exercise 1.1: Getting started](https://github.com/Junior264/DevOps_with_Kubernetes/tree/main/log_output)
 - [Exercise 1.2: The project, step 1](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.2/todo-app)
-- [Exercise 1.3: Declarative approach]()
+- [Exercise 1.3: Declarative approach](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.3/log_output/manifests)
 - [Exercise 1.4: The project, step 2]()
 
 ### 2. Introduction to Debugging
