@@ -24,3 +24,17 @@ Used commands:
 Browser output: 
 
 ![Deployment for Exercise 1.1](https://github.com/Junior264/DevOps_with_Kubernetes/blob/1.5/frontend/Exercise_1.5_BROWSER.png)
+
+## Exercise 1.6:
+
+Used commands:
+
+Delete old cluster.
+k3d cluster delete
+
+Create new cluster
+k3d cluster create --port 3000:30080@agent:0 -p 8081:80@loadbalancer --agents 2
+
+Create new-frontend deployment and apply NodePort Service from yaml.
+kubectl create deployment new-frontend --image=junior246/new_frontend
+cd frontend && kubectl apply -f manifests/deployment.yaml
