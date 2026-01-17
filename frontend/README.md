@@ -35,6 +35,8 @@ k3d cluster delete
 Create new cluster
 k3d cluster create --port 3000:30080@agent:0 -p 8081:80@loadbalancer --agents 2
 
+Changed files [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.6/frontend/manifests)
+
 Create new-frontend deployment and apply NodePort Service from yaml.
 kubectl create deployment new-frontend --image=junior246/new_frontend
 cd frontend && kubectl apply -f manifests/deployment.yaml
