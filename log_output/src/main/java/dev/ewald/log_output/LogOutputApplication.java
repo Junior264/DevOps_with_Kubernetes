@@ -1,13 +1,19 @@
-package dev.ewald;
+package dev.ewald.log_output;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        while(true) {
+@SpringBootApplication
+public class LogOutputApplication {
+
+	public static void main(String[] args) throws InterruptedException {
+		SpringApplication.run(LogOutputApplication.class, args);
+
+		while(true) {
             String randomString = generateRandomString();
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
