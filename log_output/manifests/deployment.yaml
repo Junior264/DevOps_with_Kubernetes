@@ -1,17 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
   name: log-output
 spec:
-  replicas: 1
+  type: ClusterIP
   selector:
-    matchLabels:
-      app: log_output
-  template:
-    metadata:
-      labels:
-        app: log_output
-    spec:
-      containers:
-        - name: log-output
-          image: junior246/log_output
+    app: log-output
+  ports:
+    - port: 2346
+      protocol: TCP
+      targetPort: 8081
