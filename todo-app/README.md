@@ -27,3 +27,7 @@ check the pods.
 Changed files [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.4/todo-app/manifests)
 
 ![Commands for 1.4](https://github.com/Junior264/DevOps_with_Kubernetes/blob/1.4/todo-app/Exercise_1.4_COMMANDS.png)
+
+## Exercise 1.8
+
+Changed files [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.8/todo-app/manifests)
