@@ -16,7 +16,7 @@
 
 - [Exercise 1.5: The project, step 3](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.5/frontend)
 - [Exercise 1.6: The project, step 4](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.6/frontend/manifests)
-- [Exercise 1.7: External access with Ingress]()
+- [Exercise 1.7: External access with Ingress](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.7/log_output/manifests)
 - [Exercise 1.8: The project, step 5]()
 - [Exercise 1.9: More services]()
 
