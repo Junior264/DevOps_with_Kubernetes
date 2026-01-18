@@ -1,17 +1,12 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
   name: todo-app
 spec:
-  replicas: 1
+  type: ClusterIP
   selector:
-    matchLabels:
-      app: todo_app
-  template:
-    metadata:
-      labels:
-        app: todo_app
-    spec:
-      containers:
-        - name: todo-app
-          image: junior246/todo_app
+    app: todo-app
+  ports:
+    - port: 2347
+      protocol: TCP
+      targetPort: 8080
