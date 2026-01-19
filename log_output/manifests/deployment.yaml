@@ -1,12 +1,30 @@
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: log-output
+  name: log-output-dep
 spec:
-  type: ClusterIP
+  replicas: 1
   selector:
-    app: log-output
-  ports:
-    - port: 2346
-      protocol: TCP
-      targetPort: 8081
+    matchLabels:
+      app: log-output
+  template:
+    metadata:
+      labels:
+        app: log-output
+    spec:
+      volumes:
+        - name: random-string
+          emptyDir: {}
+      containers:
+        - name: log-output-generate
+          image: log_output_generate
+          imagePullPolicy: Never
+          volumeMounts:
+          - name: random-string
+            mountPath: /files
+        - name: log-output-read
+          image: log_output_read
+          imagePullPolicy: Never
+          volumeMounts: 
+          - name: random-string
+            mountPath: /files
