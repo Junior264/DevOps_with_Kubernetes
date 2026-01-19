@@ -2,6 +2,7 @@ package dev.ewald.log_output.service;
 
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -28,6 +29,26 @@ public class LogOutputService {
         stream.close();
 
         return list;
+    }
+
+    public String getTimeStampedRandomStringWithPongCount() throws IOException{
+        String randomString = generateRandomString();
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedNow = now.format(formatter);
+
+        File file = new File("./files/pongCounter.txt");
+        file.createNewFile();
+
+        return randomString + " " + formattedNow + " \n Ping / Pongs: " + getCounter(file);
+    }
+
+    public Integer getCounter(File file) throws IOException{
+        String firstLine = Files.lines(Paths.get("./files/pongCounter.txt")).findFirst().orElse("0");
+
+        Integer currentCounter = Integer.valueOf(firstLine);
+
+        return currentCounter;
     }
 
     private String generateRandomString() {

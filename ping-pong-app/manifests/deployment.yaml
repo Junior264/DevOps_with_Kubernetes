@@ -1,12 +1,29 @@
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: ping-pong-app
+  name: log-output-ping-pong-dep
 spec:
-  type: ClusterIP
+  replicas: 1
   selector:
-    app: ping-pong-app
-  ports:
-    - port: 2348
-      protocol: TCP
-      targetPort: 8080
+    matchLabels:
+      app: log-output-ping-pong
+  template:
+    metadata:
+      labels:
+        app: log-output-ping-pong
+    spec:
+      volumes:
+        - name: pong-counter
+          persistentVolumeClaim:
+            claimName: file-claim
+      containers:
+        - name: log-output
+          image: junior246/log_output
+          volumeMounts:
+          - name: pong-counter
+            mountPath: /files
+        - name: ping-pong-app
+          image: junior246/ping_pong_app
+          volumeMounts:
+          - name: pong-counter
+            mountPath: /files

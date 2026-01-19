@@ -19,10 +19,22 @@ public class LogOutputController {
     @Autowired
     private LogOutputService logOutputService;
 
-    @GetMapping
+    @GetMapping("/one")
     @ResponseStatus(HttpStatus.OK)
-    public List<String> getTimeStampedRandomString() throws IOException {
+    public String getTimeStampedRandomString() {
+        return logOutputService.getTimeStampedRandomString();
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.OK)
+    public List<String> getTimeStampedRandomStrings() throws IOException {
         return logOutputService.getTimeStampedRandomStrings();
+    }
+
+    @GetMapping("/pong")
+    @ResponseStatus(HttpStatus.OK)
+    public String getTimeStampedRandomStringWithPongCount() throws IOException {
+        return logOutputService.getTimeStampedRandomStringWithPongCount();
     }
     
 }

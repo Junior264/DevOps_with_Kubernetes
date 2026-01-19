@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: log-output-ping-pong-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: log-output-ping-pong
+  ports:
+    - name: ping-pong-app 
+      port: 2348
+      protocol: TCP
+      targetPort: 8080
+    - name: log-output
+      port: 2346
+      protocol: TCP
+      targetPort: 8081
