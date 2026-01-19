@@ -17,3 +17,8 @@ Create new build and push it to docker hub, than start it up in kubernetes.
 
 Create manifest and add them.
 - kubectl apply -f manifests
+
+## Exercise 1.11
+
+Config changes made [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.11/persistendData)
+and [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.11/ping-pong-app/manifests)
