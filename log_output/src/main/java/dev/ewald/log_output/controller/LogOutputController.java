@@ -1,5 +1,8 @@
 package dev.ewald.log_output.controller;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +21,8 @@ public class LogOutputController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public String getTimeStampedRandomString() {
-        return logOutputService.getTimeStampedRandomString();
+    public List<String> getTimeStampedRandomString() throws IOException {
+        return logOutputService.getTimeStampedRandomStrings();
     }
     
 }
