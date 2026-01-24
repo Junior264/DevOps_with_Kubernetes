@@ -27,3 +27,10 @@ spec:
             name: todo-app-fullstack-svc
             port:
               number: 5173
+      - path: /todos
+        pathType: Prefix
+        backend:
+          service:
+            name: todo-app-fullstack-svc
+            port:
+              number: 8080

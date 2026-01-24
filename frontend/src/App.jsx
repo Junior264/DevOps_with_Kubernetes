@@ -4,12 +4,17 @@ import { useState, useEffect } from 'react';
 const App = () => {
   const [version, setVersion] = useState(() => Date.now());
   const [todoText, setTodoText] = useState("");
+  const [todos, setTodos] = useState([]);
 
-  const [todos, setTodos] = useState([
-    "Learn Kubernetes",
-    "Learn React",
-    "Build a project"
-  ]);
+  const fetchTodos = () => {
+    fetch("/todos")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to fetch todos");
+        return res.json();
+      })
+      .then(data => setTodos(data))
+      .catch(err => console.error(err));
+  };
 
   const updateImageVersion = () => {
     setVersion(Date.now());
@@ -27,6 +32,7 @@ const App = () => {
   };
 
   useEffect(() => {
+    fetchTodos();
     const intervalId = setInterval(handleTimerTick, 10 * 60 * 1000);
 
     return () => clearInterval(intervalId);
@@ -41,8 +47,18 @@ const App = () => {
 
   const handleSendTodo = () => {
     if (todoText.trim().length > 0) {
-      setTodos([...todos, todoText]);
-      setTodoText("");
+      fetch("/todos", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" }, 
+        body: todoText
+      })
+      .then(res => {
+        if (res.ok) {
+          setTodoText("");
+          fetchTodos();
+        }
+      })
+      .catch(err => console.error("Error sending todo:", err));
     }
   };
 
