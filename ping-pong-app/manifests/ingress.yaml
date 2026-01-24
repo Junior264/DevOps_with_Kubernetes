@@ -10,13 +10,20 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: log-output-ping-pong-svc
+            name: ping-pong-svc
+            port:
+              number: 2348
+      - path: /pings
+        pathType: Prefix
+        backend:
+          service:
+            name: ping-pong-svc
             port:
               number: 2348
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: log-output-ping-pong-svc
+            name: log-output-svc
             port:
               number: 2346

@@ -14,16 +14,17 @@ import org.springframework.stereotype.Service;
 public class PingPongService {
     public String pongCounter() throws IOException{
         File file = new File("./files/pongCounter.txt");
+        file.getParentFile().mkdirs();
         file.createNewFile();
 
-        Integer counter = getCounter(file);
+        Integer counter = getCounter();
         counter++;
         setCounter(file, counter);
 
         return "Ping / Pongs: " + String.valueOf(counter);
     }
 
-    public Integer getCounter(File file) throws IOException{
+    public Integer getCounter() throws IOException{
         String firstLine = Files.lines(Paths.get("./files/pongCounter.txt")).findFirst().orElse("0");
 
         Integer currentCounter = Integer.valueOf(firstLine);
@@ -45,6 +46,10 @@ public class PingPongService {
 
         fw.write(newCounter);
         fw.close();
+    }
+
+    public Integer getPings() throws IOException{
+        return getCounter();
     }
 
 }

@@ -1,6 +1,8 @@
 package dev.ewald.log_output.service;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.stream.Stream;
 
 @Service
 public class LogOutputService {
+    private final RestClient restClient = RestClient.create();
+
     public String getTimeStampedRandomString() {
         String randomString = generateRandomString();
         LocalDateTime now = LocalDateTime.now();
@@ -40,16 +44,24 @@ public class LogOutputService {
         File file = new File("./files/pongCounter.txt");
         file.createNewFile();
 
-        return randomString + " " + formattedNow + " \n Ping / Pongs: " + getCounter(file);
+        return randomString + " " + formattedNow + " \n Ping / Pongs: " + getCounterFromRequest();
     }
 
-    public Integer getCounter(File file) throws IOException{
-        String firstLine = Files.lines(Paths.get("./files/pongCounter.txt")).findFirst().orElse("0");
-
-        Integer currentCounter = Integer.valueOf(firstLine);
-
-        return currentCounter;
+    public Integer getCounterFromRequest() {
+        return restClient.get()
+                .uri("http://ping-pong-svc:2348/pings")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(Integer.class);
     }
+
+    // public Integer getCounter(File file) throws IOException{
+    //     String firstLine = Files.lines(Paths.get("./files/pongCounter.txt")).findFirst().orElse("0");
+
+    //     Integer currentCounter = Integer.valueOf(firstLine);
+
+    //     return currentCounter;
+    // }
 
     private String generateRandomString() {
         return UUID.randomUUID().toString();

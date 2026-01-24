@@ -12,14 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.ewald.ping_pong_app.service.PingPongService;
 
 @RestController
-@RequestMapping("/pingpong")
+@RequestMapping("/")
 public class PingPongController {
     @Autowired
     PingPongService pingpongService;
 
-    @GetMapping
+    @GetMapping("/pingpong")
     @ResponseStatus(HttpStatus.OK)
     public String getPongCounter() throws IOException {
         return pingpongService.pongCounter();
+    }
+
+    @GetMapping("/pings")
+    @ResponseStatus(HttpStatus.OK)
+    public Integer getPings() throws IOException {
+        return pingpongService.getPings();
     }
 }
