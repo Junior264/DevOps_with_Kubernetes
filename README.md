@@ -26,3 +26,31 @@
 - [Exercise 1.11: Persisting data](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.11/ping-pong-app/manifests)
 - [Exercise 1.12: The project, step 6](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.12/todo-app/manifests)
 - [Exercise 1.13: The project, step 7](https://github.com/Junior264/DevOps_with_Kubernetes/blob/1.13/frontend/src/App.jsx)
+
+
+
+## Part 2
+
+### 1. Networking between pods
+
+- [Exercise 2.1. Connecting pods](https://github.com/Junior264/DevOps_with_Kubernetes/tree/2.1/ping-pong-app/manifests)
+- [Exercise 2.2. The project, step 8]()
+
+### 2. Organizing a cluster
+
+- [Exercise 2.3. Keep them separated]()
+- [Exercise 2.4. The project, step 9]()
+
+### 3. Configuring applications
+
+- [Exercise 2.5. Documentation and ConfigMaps]()
+- [Exercise 2.6. The project, step 10]()
+
+### 4. StatefulSets and Jobs
+
+- [Exercise 2.7. Stateful applications]()
+- [Exercise 2.8. The project, step 11]()
+- [Exercise 2.9 The project, step 12]()
+
+### 5. Monitoring
+- [Exercise 2.10. The project, step 13]()
