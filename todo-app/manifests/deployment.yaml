@@ -1,12 +1,35 @@
-apiVersion: v1
-kind: Service
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: todo-app
+  name: todo-app-fullstack-dep
 spec:
-  type: ClusterIP
+  replicas: 1
   selector:
-    app: todo-app
-  ports:
-    - port: 2347
-      protocol: TCP
-      targetPort: 8080
+    matchLabels:
+      app: todo-app-fullstack
+  template:
+    metadata:
+      labels:
+        app: todo-app-fullstack
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: k3d-k3s-default-agent-0
+      volumes:
+        - name: shared-images
+          persistentVolumeClaim:
+            claimName: image-claim
+      containers:
+        - name: frontend
+          image: junior246/new_frontend
+          ports: 
+           - containerPort: 5173
+          volumeMounts:
+          - name: shared-images
+            mountPath: /usr/local/app/public/images
+        - name: todo-app
+          image: junior246/todo_app
+          ports: 
+           - containerPort: 8080
+          volumeMounts:
+          - name: shared-images
+            mountPath: /sharedImages
