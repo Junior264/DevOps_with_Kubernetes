@@ -24,5 +24,5 @@
 
 - [Exercise 1.10: Even more services](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.10/log_output/manifests)
 - [Exercise 1.11: Persisting data](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.11/ping-pong-app/manifests)
-- [Exercise 1.12: The project, step 6]()
-- [Exercise 1.13: The project, step 7]()
+- [Exercise 1.12: The project, step 6](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.12/todo-app/manifests)
+- [Exercise 1.13: The project, step 7](https://github.com/Junior264/DevOps_with_Kubernetes/blob/1.13/frontend/src/App.jsx)
