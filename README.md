@@ -34,12 +34,12 @@
 ### 1. Networking between pods
 
 - [Exercise 2.1. Connecting pods](https://github.com/Junior264/DevOps_with_Kubernetes/tree/2.1/ping-pong-app/manifests)
-- [Exercise 2.2. The project, step 8]()
+- [Exercise 2.2. The project, step 8](https://github.com/Junior264/DevOps_with_Kubernetes/tree/2.2/todo-app)
 
 ### 2. Organizing a cluster
 
-- [Exercise 2.3. Keep them separated]()
-- [Exercise 2.4. The project, step 9]()
+- [Exercise 2.3. Keep them separated](https://github.com/Junior264/DevOps_with_Kubernetes/tree/2.3/ping-pong-app/manifests)
+- [Exercise 2.4. The project, step 9](https://github.com/Junior264/DevOps_with_Kubernetes/tree/2.4/todo-app/manifests)
 
 ### 3. Configuring applications
 
