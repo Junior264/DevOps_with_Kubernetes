@@ -22,3 +22,15 @@ Create manifest and add them.
 
 Config changes made [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.11/persistendData)
 and [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.11/ping-pong-app/manifests)
+
+## Exercise 2.3
+
+Execute command:
+kubectl create namespace exercises
+
+then add:
+
+metadata:
+  namespace: exercises
+
+to my yaml related to that.
