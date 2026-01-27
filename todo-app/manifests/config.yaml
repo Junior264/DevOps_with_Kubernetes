@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: project
+  name: todo-app-fullstack-config
+data:
+  image-shared-path: /sharedImages/randomImage.jpg
+  image-source-url: https://picsum.photos/1200
+  image-refresh-timer: "600000"
+  application.properties: |
+    server.port=8080
+    spring.application.name=todo-app

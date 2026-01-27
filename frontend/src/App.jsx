@@ -5,6 +5,7 @@ const App = () => {
   const [version, setVersion] = useState(() => Date.now());
   const [todoText, setTodoText] = useState("");
   const [todos, setTodos] = useState([]);
+  const FETCH_INTERVAL = Number(import.meta.env.VITE_FETCH_INTERVAL) || 600000;
 
   const fetchTodos = () => {
     fetch("/todos")
@@ -33,7 +34,7 @@ const App = () => {
 
   useEffect(() => {
     fetchTodos();
-    const intervalId = setInterval(handleTimerTick, 10 * 60 * 1000);
+    const intervalId = setInterval(handleTimerTick, FETCH_INTERVAL);
 
     return () => clearInterval(intervalId);
   }, []);

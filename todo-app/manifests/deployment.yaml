@@ -19,11 +19,23 @@ spec:
         - name: shared-images
           persistentVolumeClaim:
             claimName: image-claim
+        - name: config-properties
+          configMap:
+            name: todo-app-fullstack-config
+            items:
+              - key: application.properties
+                path: application.properties
       containers:
         - name: frontend
           image: junior246/new_frontend
           ports: 
            - containerPort: 5173
+          env:
+          - name: VITE_FETCH_INTERVAL
+            valueFrom:
+              configMapKeyRef:
+                name: todo-app-fullstack-config
+                key: image-refresh-timer
           volumeMounts:
           - name: shared-images
             mountPath: /usr/local/app/public/images
@@ -31,6 +43,20 @@ spec:
           image: junior246/todo_app
           ports: 
            - containerPort: 8080
+          env:
+            - name: IMAGE_SOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-fullstack-config
+                  key: image-source-url
+            - name: IMAGE_SHARED_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: todo-app-fullstack-config
+                  key: image-shared-path
           volumeMounts:
           - name: shared-images
             mountPath: /sharedImages
+          - name: config-properties
+            mountPath: /config
+            readOnly: true
