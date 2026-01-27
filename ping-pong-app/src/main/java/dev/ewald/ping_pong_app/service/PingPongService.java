@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,11 +26,17 @@ public class PingPongService {
     }
 
     public Integer getCounter() throws IOException{
-        String firstLine = Files.lines(Paths.get("./files/pongCounter.txt")).findFirst().orElse("0");
+        Path path = Paths.get("./files/pongCounter.txt");
 
-        Integer currentCounter = Integer.valueOf(firstLine);
+        try {
+            String firstLine = Files.readString(path).trim();
 
-        return currentCounter;
+            return firstLine.isEmpty() ? 0 : Integer.parseInt(firstLine);
+        } catch (Exception e) {
+            System.err.println("Unable to read counter: " + e.getMessage());
+            
+            return 0;
+        }
     }
 
     public List<String> getTimeStampedRandomStrings() throws IOException {
