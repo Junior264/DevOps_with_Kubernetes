@@ -14,10 +14,6 @@ spec:
       labels:
         app: log-output
     spec:
-      # volumes:
-      #   - name: pong-counter
-      #     persistentVolumeClaim:
-      #       claimName: file-claim
       containers:
         - name: log-output
           image: junior246/log_output
@@ -28,14 +24,11 @@ spec:
                   name: log-output-config
                   key: message
           volumeMounts:
-            - name: config
-              mountPath: "/config"
-              readOnly: true
-          # volumeMounts:
-          # - name: pong-counter
-          #   mountPath: /files
+              - name: log-output-config
+                mountPath: /config
+                readOnly: true
       volumes:
-        - name: config
+        - name: log-output-config
           configMap:
             name: log-output-config
             items:
@@ -59,13 +52,17 @@ spec:
       labels:
         app: ping-pong
     spec:
-      # volumes:
-      #   - name: pong-counter
-      #     persistentVolumeClaim:
-      #       claimName: file-claim
       containers:
         - name: ping-pong-app
           image: junior246/ping_pong_app
-          # volumeMounts:
-          # - name: pong-counter
-          #   mountPath: /files
+          volumeMounts:
+            - name: properties-config
+              mountPath: "/config"
+              readOnly: true
+      volumes:
+        - name: properties-config
+          configMap:
+            name: log-output-config
+            items:
+              - key: application.properties
+                path: application.properties

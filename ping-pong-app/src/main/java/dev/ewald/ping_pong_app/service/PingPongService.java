@@ -9,35 +9,58 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import dev.ewald.ping_pong_app.model.Counter;
+import dev.ewald.ping_pong_app.repository.PingPongRepository;
 
 @Service
 public class PingPongService {
-    public String pongCounter() throws IOException{
-        File file = new File("./files/pongCounter.txt");
-        file.getParentFile().mkdirs();
-        file.createNewFile();
+    @Autowired
+    private PingPongRepository pingPongRepository;
 
-        Integer counter = getCounter();
-        counter++;
-        setCounter(file, counter);
+    public String pongCounter() {
+        Counter counter = pingPongRepository.findById(1).orElse(new Counter(1, 0));
 
-        return "Ping / Pongs: " + String.valueOf(counter);
+        counter.setCount(counter.getCount() + 1);
+        pingPongRepository.save(counter);
+
+        return "Ping / Pongs: " + counter.getCount();
     }
 
-    public Integer getCounter() throws IOException{
-        Path path = Paths.get("./files/pongCounter.txt");
-
-        try {
-            String firstLine = Files.readString(path).trim();
-
-            return firstLine.isEmpty() ? 0 : Integer.parseInt(firstLine);
-        } catch (Exception e) {
-            System.err.println("Unable to read counter: " + e.getMessage());
-            
-            return 0;
-        }
+    public Integer getCounter(){
+        return pingPongRepository
+                    .findById(1)
+                    .orElse(new Counter(1, 0))
+                    .getCount();
     }
+
+    // public String pongCounter() throws IOException{
+    //     File file = new File("./files/pongCounter.txt");
+    //     file.getParentFile().mkdirs();
+    //     file.createNewFile();
+
+    //     Integer counter = getCounter();
+    //     counter++;
+    //     setCounter(file, counter);
+
+    //     return "Ping / Pongs: " + String.valueOf(counter);
+    // }
+
+    // public Integer getCounter() throws IOException{
+    //     Path path = Paths.get("./files/pongCounter.txt");
+
+    //     try {
+    //         String firstLine = Files.readString(path).trim();
+
+    //         return firstLine.isEmpty() ? 0 : Integer.parseInt(firstLine);
+    //     } catch (Exception e) {
+    //         System.err.println("Unable to read counter: " + e.getMessage());
+
+    //         return 0;
+    //     }
+    // }
 
     public List<String> getTimeStampedRandomStrings() throws IOException {
         Stream<String> stream = Files.lines(Paths.get("./files/timeStampedRandomString.txt"));

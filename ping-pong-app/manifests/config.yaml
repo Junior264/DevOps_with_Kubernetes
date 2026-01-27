@@ -7,3 +7,10 @@ data:
   message: hello world
   information.txt: | 
     this text is from file
+  application.properties: |
+    server.port=8080
+    spring.application.name=ping-pong-app
+    spring.datasource.url=jdbc:postgresql://postgres-svc:5432/pingpongdb
+    spring.datasource.username=postgres
+    spring.datasource.password=secret
+    spring.jpa.hibernate.ddl-auto=update

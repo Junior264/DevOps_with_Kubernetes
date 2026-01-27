@@ -34,3 +34,6 @@ metadata:
   namespace: exercises
 
 to my yaml related to that.
+
+## Exercise 2.7
+Because postgres settings not configured in application.properties and only in Kubernetes with configmap we use "mvn package -DskipTests" to skip tests.
