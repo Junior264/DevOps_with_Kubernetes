@@ -1,5 +1,6 @@
 package dev.ewald.log_output.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -17,6 +18,9 @@ import java.util.stream.Stream;
 @Service
 public class LogOutputService {
     private final RestClient restClient = RestClient.create();
+
+    @Value("${MESSAGE:No message load}")
+    private String message;
 
     public String getTimeStampedRandomString() {
         String randomString = generateRandomString();
@@ -40,11 +44,17 @@ public class LogOutputService {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedNow = now.format(formatter);
+        String fileContent = "";
+        
+        try {
+            fileContent = new String(Files.readAllBytes(Paths.get("config/information.txt")));
+        } catch (IOException e) {
+            throw new RuntimeException("information.txt not found.", e);
+        }
 
-        File file = new File("./files/pongCounter.txt");
-        file.createNewFile();
-
-        return randomString + " " + formattedNow + " \n Ping / Pongs: " + getCounterFromRequest();
+        return "file content: " + fileContent
+            + "env variable: MESSAGE=" + message + "\n"
+            + randomString + " " + formattedNow + " \nPing / Pongs: " + getCounterFromRequest();
     }
 
     public Integer getCounterFromRequest() {
