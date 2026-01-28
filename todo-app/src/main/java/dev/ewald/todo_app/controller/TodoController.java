@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.ewald.todo_app.model.Todo;
 import dev.ewald.todo_app.service.TodoService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/todos")
+@Slf4j
 public class TodoController {
     @Autowired
     TodoService todoService;
@@ -33,6 +35,7 @@ public class TodoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createTodo(@RequestBody String todo) {
+        log.info("Received todo request: {}", todo);
         todoService.createTodo(todo);
     }
 }
