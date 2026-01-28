@@ -104,8 +104,8 @@ const App = () => {
     </div>
 
     <ul>
-      {todos.map((todo, index) => (
-        <li key={index} style={{padding: '10px 0', display: 'flex', alignItems: 'center'}}> {todo} </li>
+      {todos.map((todo) => (
+        <li key={todo.id} style={{padding: '10px 0', display: 'flex', alignItems: 'center'}}> {todo.name} </li>
       ))}
     </ul>
   </div>

@@ -10,3 +10,9 @@ data:
   application.properties: |
     server.port=8080
     spring.application.name=todo-app
+    spring.datasource.url=jdbc:postgresql://postgres-svc:5432/todo
+    spring.datasource.username=postgres
+    spring.datasource.password=${DB_PASSWORD}
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+    spring.datasource.driver-class-name=org.postgresql.Driver

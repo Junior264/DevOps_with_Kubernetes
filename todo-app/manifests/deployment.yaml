@@ -44,6 +44,13 @@ spec:
           ports: 
            - containerPort: 8080
           env:
+            - name: SPRING_CONFIG_LOCATION
+              value: "file:/config/application.properties"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: IMAGE_SOURCE_URL
               valueFrom:
                 configMapKeyRef:

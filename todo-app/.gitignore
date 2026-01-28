@@ -34,3 +34,11 @@ build/
 
 ### shared tmp files ###
 /sharedImages
+
+# SOPS / age Schlüssel
+key.txt
+keys.txt
+
+# Unverschlüsselte Secrets (nur die .enc.yaml darf rein)
+secret.yaml
+!secret.enc.yaml

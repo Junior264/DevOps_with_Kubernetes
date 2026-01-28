@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.ewald.todo_app.model.Todo;
 import dev.ewald.todo_app.service.TodoService;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class TodoController {
     
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<String> getTodos() {
+    public List<Todo> getTodos() {
         return todoService.getTodos();
     }
 
