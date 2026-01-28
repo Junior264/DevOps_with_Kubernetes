@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: project
+  name: wiki-todo-cronjob
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: wiki-generator
+            image: alpine:3.21
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                apk add --no-cache curl
+
+                WIKI_URL=$(curl -s -L -o /dev/null -w %{url_effective} https://en.wikipedia.org/wiki/Special:Random)
+
+                curl -X POST http://todo-app-fullstack-svc:8080/todos \
+                     -H "Content-Type: text/plain" \
+                     -d "Read $WIKI_URL"
+          restartPolicy: OnFailure
