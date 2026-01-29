@@ -18,7 +18,7 @@ metadata:
   name: postgres-stset
 spec:
   serviceName: postgres-svc
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: postgressapp
@@ -32,7 +32,10 @@ spec:
           image: postgres:latest
           env:
             - name: POSTGRES_PASSWORD
-              value: "secret"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               value: pingpongdb
             - name: PGDATA
@@ -42,6 +45,7 @@ spec:
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data
+              subPath: postgres
   volumeClaimTemplates:
     - metadata:
         name: postgres-data

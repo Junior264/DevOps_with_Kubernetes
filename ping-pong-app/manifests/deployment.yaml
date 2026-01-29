@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: log-output
-          image: junior246/log_output
+          image: junior246/log_output:latest
+          imagePullPolicy: Always
           env:
             - name: MESSAGE
               valueFrom:
@@ -54,7 +55,11 @@ spec:
     spec:
       containers:
         - name: ping-pong-app
-          image: junior246/ping_pong_app
+          image: junior246/ping_pong_app:latest
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_CONFIG_LOCATION
+              value: "optional:file:/config/application.properties"
           volumeMounts:
             - name: properties-config
               mountPath: "/config"

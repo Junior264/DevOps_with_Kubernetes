@@ -5,11 +5,11 @@ metadata:
   namespace: exercises
   name: ping-pong-svc
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: ping-pong
   ports:
-    - port: 2348
+    - port: 80
       targetPort: 8080
 
 ---
@@ -20,9 +20,9 @@ metadata:
   namespace: exercises
   name: log-output-svc
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: log-output
   ports:
-    - port: 2346
+    - port: 80
       targetPort: 8081
