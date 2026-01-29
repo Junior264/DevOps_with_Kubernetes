@@ -59,7 +59,7 @@ public class LogOutputService {
 
     public Integer getCounterFromRequest() {
         return restClient.get()
-                .uri("http://ping-pong-svc:80/pings")
+                .uri("http://ping-pong-svc:2348/pings")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .body(Integer.class);

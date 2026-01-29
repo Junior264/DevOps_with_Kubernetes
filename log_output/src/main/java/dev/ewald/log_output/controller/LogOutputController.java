@@ -20,6 +20,12 @@ public class LogOutputController {
     @Autowired
     private LogOutputService logOutputService;
 
+    @GetMapping("/")
+    @ResponseStatus(HttpStatus.OK)
+    public String healthCheck() {
+        return "OK";
+    }
+
     @GetMapping("/one")
     @ResponseStatus(HttpStatus.OK)
     public String getTimeStampedRandomString() {
