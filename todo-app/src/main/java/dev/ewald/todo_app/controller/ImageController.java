@@ -8,11 +8,8 @@ import dev.ewald.todo_app.service.ImageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
-// @todo CORS open to every domain for learning purpose. FIX LATER...
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/image")
 public class ImageController {

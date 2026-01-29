@@ -5,6 +5,8 @@ metadata:
   name: todo-app-fullstack-dep
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: todo-app-fullstack
@@ -13,8 +15,6 @@ spec:
       labels:
         app: todo-app-fullstack
     spec:
-      nodeSelector:
-        kubernetes.io/hostname: k3d-k3s-default-agent-0
       volumes:
         - name: shared-images
           persistentVolumeClaim:
