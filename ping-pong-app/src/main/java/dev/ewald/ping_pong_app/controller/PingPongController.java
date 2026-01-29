@@ -19,12 +19,6 @@ public class PingPongController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public String healthCheck() {
-        return "OK";
-    }
-
-    @GetMapping("/pingpong")
-    @ResponseStatus(HttpStatus.OK)
     public String getPongCounter() throws IOException {
         return pingpongService.pongCounter();
     }
