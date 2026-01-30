@@ -4,12 +4,14 @@ metadata:
   name: postgres-backup-gcs
   namespace: project
 spec:
-  schedule: "0 3 * * *" # Täglich um 03:00 Uhr
+  schedule: "0 3 * * *"
   jobTemplate:
     spec:
       template:
         spec:
-          serviceAccountName: backup-sa 
+          serviceAccountName: backup-sa
+          nodeSelector:
+            iam.gke.io/gke-metadata-server-enabled: "true"
           containers:
           - name: backup-container
             image: google/cloud-sdk:alpine
@@ -24,25 +26,14 @@ spec:
               - |
                 set -e
                 apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql18-client
-                
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
-
-                echo "Authenticating with Google Cloud..."
-                gcloud auth activate-service-account --key-file=/secret/credentials.json
 
                 echo "Starting database backup..."
                 pg_dump -h postgres-svc -U postgres -d todo > /tmp/$FILENAME
 
-                echo "Uploading $FILENAME to GCS..."
+                echo "Uploading to GCS using Workload Identity..."
+                # Kein 'gcloud auth activate' nötig! gsutil nutzt die Pod-Identität.
                 gsutil cp /tmp/$FILENAME gs://your-todo-backup-bucket/
 
                 echo "Backup successful: $FILENAME"
-            volumeMounts:
-            - name: gcs-key
-              mountPath: /secret
-              readOnly: true
-          volumes:
-          - name: gcs-key
-            secret:
-              secretName: gcs-backup-secret
           restartPolicy: OnFailure
