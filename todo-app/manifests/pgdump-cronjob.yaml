@@ -14,7 +14,7 @@ spec:
             iam.gke.io/gke-metadata-server-enabled: "true"
           containers:
           - name: backup-container
-            image: google/cloud-sdk:alpine
+            image: postgres:18-alpine
             env:
             - name: PGPASSWORD
               valueFrom:
@@ -25,15 +25,18 @@ spec:
             args:
               - |
                 set -e
-                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql18-client
+                # Installiere gsutil (GCS Client) via Python
+                apk add --no-cache python3 py3-pip
+                # Erstelle eine virtuelle Umgebung oder nutze --break-system-packages für den Container
+                pip install gsutil --break-system-packages --no-cache-dir
+
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
 
-                echo "Starting database backup..."
+                echo "Starting backup with native pg_dump..."
                 pg_dump -h postgres-svc -U postgres -d todo > /tmp/$FILENAME
 
-                echo "Uploading to GCS using Workload Identity..."
-                # Kein 'gcloud auth activate' nötig! gsutil nutzt die Pod-Identität.
+                echo "Uploading to GCS..."
                 gsutil cp /tmp/$FILENAME gs://your-todo-backup-bucket/
 
-                echo "Backup successful: $FILENAME"
+                echo "Done!"
           restartPolicy: OnFailure
