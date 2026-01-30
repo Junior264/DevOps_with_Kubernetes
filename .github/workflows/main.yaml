@@ -74,6 +74,7 @@ jobs:
 
       - name: Deploy
         run: |
+          kubectl create namespace ${{ env.NAMESPACE }} --dry-run=client -o yaml | kubectl apply -f -
           cd todo-app/manifests
           kustomize edit set image TODO_IMAGE=${{ env.FINAL_TAG_BACKEND }}
           kustomize edit set image TODO_FRONTEND_IMAGE=${{ env.FINAL_TAG_FRONTEND }}
