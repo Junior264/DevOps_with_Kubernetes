@@ -2,14 +2,14 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: postgres-backup-gcs
+  namespace: project
 spec:
-  schedule: "0 3 * * *" # Daily at 03:00
+  schedule: "0 3 * * *" # Täglich um 03:00 Uhr
   jobTemplate:
     spec:
       template:
         spec:
-          serviceAccountName: backup-sa
-          restartPolicy: OnFailure
+          serviceAccountName: backup-sa 
           containers:
           - name: backup-container
             image: google/cloud-sdk:alpine
@@ -22,13 +22,27 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
-                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main postgresql18-client
+                set -e
+                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql18-client
+                
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
 
-                echo "Starting backup..."
+                echo "Authenticating with Google Cloud..."
+                gcloud auth activate-service-account --key-file=/secret/credentials.json
+
+                echo "Starting database backup..."
                 pg_dump -h postgres-svc -U postgres -d todo > /tmp/$FILENAME
 
-                echo "Uploading to GCS..."
+                echo "Uploading $FILENAME to GCS..."
                 gsutil cp /tmp/$FILENAME gs://your-todo-backup-bucket/
 
-                echo "Done!"
+                echo "Backup successful: $FILENAME"
+            volumeMounts:
+            - name: gcs-key
+              mountPath: /secret
+              readOnly: true
+          volumes:
+          - name: gcs-key
+            secret:
+              secretName: gcs-backup-secret
+          restartPolicy: OnFailure
