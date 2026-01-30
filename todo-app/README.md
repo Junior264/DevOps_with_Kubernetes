@@ -31,3 +31,16 @@ Changed files [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.
 ## Exercise 1.8
 
 Changed files [here](https://github.com/Junior264/DevOps_with_Kubernetes/tree/1.8/todo-app/manifests)
+
+## Exercise 3.9
+# DBaaS vs. DIY: Database Comparison
+
+## Database Comparison
+
+| Feature | DIY (Postgres on GKE) | DBaaS (Google Cloud SQL) |
+| :--- | :--- | :--- |
+| **Initialization** | **Complex:** Requires manual creation of StatefulSets, PVCs, and Services (heavy YAML configuration). | **Simple:** Provisioned via the Console or API as a managed service. |
+| **Costs** | **Lower:** Uses existing GKE node resources; costs mainly incur for storage (Persistent Disks). | **Higher:** Additional service fees for management, high availability, and support. |
+| **Maintenance** | **Self-managed:** Updates, OS patching, and scaling must be handled manually. | **Fully Managed:** Google handles patches, version updates, and hardware maintenance automatically. |
+| **Backups** | **Manual / Complex:** Requires custom scripts (pg_dump) or disk snapshots; PITR is difficult to implement. | **Automated:** 1-click restore and Point-in-Time Recovery (PITR) are standard built-in features. |
+
