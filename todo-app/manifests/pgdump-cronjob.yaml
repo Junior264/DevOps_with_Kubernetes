@@ -4,34 +4,35 @@ metadata:
   name: postgres-backup-gcs
   namespace: project
 spec:
-  schedule: "0 3 * * *"
+  schedule: "0 3 * * *"  # Daily at 03:00
   jobTemplate:
     spec:
       template:
         spec:
           serviceAccountName: backup-sa
-          nodeSelector:
-            iam.gke.io/gke-metadata-server-enabled: "true"
+          restartPolicy: OnFailure
           containers:
           - name: backup-container
             image: google/cloud-sdk:alpine
+            command: ["/bin/sh", "-c"]
+            args:
+              - |
+                # Install PostgreSQL 18 client from edge/main
+                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main postgresql18-client
+
+                # Set backup filename
+                FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
+
+                echo "Starting backup..."
+                pg_dump -h postgres-svc -U postgres -d todo > /tmp/$FILENAME
+
+                echo "Uploading to GCS..."
+                gcloud storage cp /tmp/$FILENAME gs://your-todo-backup-bucket/
+
+                echo "Done!"
             env:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
-            command: ["/bin/sh", "-c"]
-            args:
-              - |
-                set -e
-                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql18-client ||
-                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql17-client
-                
-                FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
-                pg_dump -h postgres-svc -U postgres -d todo > /tmp/$FILENAME
-                
-                gcloud storage cp /tmp/$FILENAME gs://your-todo-backup-bucket/
-
-                echo "Done!"
-          restartPolicy: OnFailure
