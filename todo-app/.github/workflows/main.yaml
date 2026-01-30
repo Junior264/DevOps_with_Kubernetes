@@ -1,0 +1,76 @@
+name: Release application
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GKE_CLUSTER: dwk-cluster 
+  GKE_ZONE: europe-west3-c
+  REGISTRY: europe-west3-docker.pkg.dev
+  REPOSITORY: todo-repository
+  IMAGE_BACKEND: todo-app
+  IMAGE_FRONTEND: frontend
+  SERVICE: todo-app-fullstack-dep
+  NAMESPACE: project
+
+jobs:
+  build-publish-deploy:
+    name: Build, Publish and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/668823593060/locations/global/workloadIdentityPools/github/providers/github-provider'
+          service_account: 'github-actions@project-8e8aec54-2e81-49e9-951.iam.gserviceaccount.com'
+
+      - name: 'Set up Cloud SDK'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: 'Get GKE credentials'
+        uses: 'google-github-actions/get-gke-credentials@v2'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER }}'
+          project_id: '${{ env.PROJECT_ID }}'
+          location: '${{ env.GKE_ZONE }}'
+
+      - name: Configure Docker
+        run: gcloud --quiet auth configure-docker ${{ env.REGISTRY }}
+
+      - name: 'Form the image name'
+        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" >> $GITHUB_ENV
+
+      - name: Build and Publish Images
+        run: |
+          # Tags definieren
+          TAG_BACKEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_BACKEND }}:${{ github.sha }}
+          TAG_FRONTEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_FRONTEND }}:${{ github.sha }}
+          
+          # Backend bauen & pushen (Dockerfile im Root?)
+          docker build -t $TAG_BACKEND . 
+          docker push $TAG_BACKEND
+          
+          # Frontend bauen & pushen (Ordner 'frontend' muss existieren!)
+          docker build -t $TAG_FRONTEND ./frontend 
+          docker push $TAG_FRONTEND
+          
+          # Tags für Kustomize-Step speichern
+          echo "FINAL_TAG_BACKEND=$TAG_BACKEND" >> $GITHUB_ENV
+          echo "FINAL_TAG_FRONTEND=$TAG_FRONTEND" >> $GITHUB_ENV
+
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2.1.0
+
+      - name: Deploy
+        run: |-
+          cd manifests
+          ustomize edit set image TODO_IMAGE=${{ env.FINAL_TAG_BACKEND }}
+          kustomize edit set image TODO_FRONTEND_IMAGE=${{ env.FINAL_TAG_FRONTEND }}
+          kustomize build . | kubectl apply -f -
+          kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.NAMESPACE }}

@@ -27,7 +27,7 @@ spec:
                 path: application.properties
       containers:
         - name: frontend
-          image: junior246/new_frontend
+          image: TODO_FRONTEND_IMAGE
           ports: 
            - containerPort: 5173
           env:
@@ -40,7 +40,7 @@ spec:
           - name: shared-images
             mountPath: /usr/local/app/public/images
         - name: todo-app
-          image: junior246/todo_app
+          image: TODO_IMAGE
           ports: 
            - containerPort: 8080
           env:
