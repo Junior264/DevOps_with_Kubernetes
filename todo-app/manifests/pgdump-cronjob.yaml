@@ -22,7 +22,7 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
-                apk add --no-cache postgresql-client
+                apk add --no-cache postgresql18-client
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
 
                 echo "Starting backup..."
