@@ -1,0 +1,3 @@
+creation_rules:
+  - path_regex: .*secret.*\.yaml
+    gcp_kms: projects/668823593060/locations/global/keyRings/sops-keyring/cryptoKeys/sops-key

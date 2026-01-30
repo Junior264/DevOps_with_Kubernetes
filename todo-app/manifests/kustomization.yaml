@@ -9,7 +9,7 @@ images:
     newName: europe-west3-docker.pkg.dev/project-8e8aec54-2e81-49e9-951/todo-repository/frontend
     newTag: latest
 resources:
-  - secrets/secret.yaml
+  - secrets/secret.enc.yaml
   - config.yaml
   - persistentvolumeclaim.yaml
   - postgres.yaml
