@@ -1,9 +1,21 @@
-FROM openjdk:22-jdk
-
+FROM openjdk:22-jdk AS build
 WORKDIR /usr/src/app
 
-COPY . .
+COPY mvnw .
+COPY .mvn .mvn
+COPY pom.xml .
 
-EXPOSE 8081
+RUN chmod +x mvnw
+RUN ./mvnw dependency:go-offline
 
-CMD ["./mvnw", "spring-boot:run"]
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+FROM openjdk:22-jdk
+WORKDIR /app
+
+COPY --from=build /usr/src/app/target/*.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
