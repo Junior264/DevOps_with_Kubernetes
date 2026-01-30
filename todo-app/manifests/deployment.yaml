@@ -30,6 +30,13 @@ spec:
           image: TODO_FRONTEND_IMAGE
           ports: 
            - containerPort: 5173
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
           env:
           - name: VITE_FETCH_INTERVAL
             valueFrom:
@@ -43,6 +50,13 @@ spec:
           image: TODO_IMAGE
           ports: 
            - containerPort: 8080
+          resources:
+            requests:
+              memory: "384Mi"
+              cpu: "100m"
+            limits:
+              memory: "640Mi"
+              cpu: "500m"
           env:
             - name: SPRING_CONFIG_LOCATION
               value: "file:/config/application.properties"
