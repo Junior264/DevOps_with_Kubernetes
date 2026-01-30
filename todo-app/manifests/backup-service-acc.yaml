@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backup-sa
+  namespace: project
+  annotations:
+    iam.gke.io/gcp-service-account: backup-sa@project-8e8aec54-2e81-49e9-951.iam.gserviceaccount.com

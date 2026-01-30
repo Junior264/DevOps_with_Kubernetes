@@ -17,6 +17,8 @@ resources:
   - service.yaml
   - cronjob.yaml
   - ingress.yaml
+  - backup-service-acc.yaml
+  - pgdump-cronjob.yaml
 
 commonAnnotations:
   cloud.google.com/neg: '{"ingress": true}'
