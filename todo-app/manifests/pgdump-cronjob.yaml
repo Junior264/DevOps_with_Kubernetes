@@ -25,10 +25,11 @@ spec:
             args:
               - |
                 set -e
-                # Installiere gsutil (GCS Client) via Python
                 apk add --no-cache python3 py3-pip
-                # Erstelle eine virtuelle Umgebung oder nutze --break-system-packages für den Container
                 pip install gsutil --break-system-packages --no-cache-dir
+
+                echo "[GoogleCompute]\nservice_account = default" > /tmp/.boto
+                export BOTO_CONFIG=/tmp/.boto
 
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
 
