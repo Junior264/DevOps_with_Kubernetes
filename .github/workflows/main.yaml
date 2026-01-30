@@ -46,9 +46,6 @@ jobs:
       - name: Configure Docker
         run: gcloud --quiet auth configure-docker ${{ env.REGISTRY }}
 
-      - name: 'Form the image name'
-        run: echo "IMAGE_TAG=$REGISTRY/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" >> $GITHUB_ENV
-
       - name: Build and Publish Images
         run: |
           TAG_BACKEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_BACKEND }}:${{ github.sha }}
@@ -73,7 +70,7 @@ jobs:
           sudo mv sops-v3.8.1.linux.amd64 /usr/local/bin/sops
 
       - name: Decrypt Kubernetes secret
-        run: sops -d todo-app/manifests/secrets/secret.enc.yaml todo-app/manifests/secrets/secret.yaml
+        run: sops -d todo-app/manifests/secrets/secret.enc.yaml > todo-app/manifests/secrets/secret.yaml
 
       - name: Deploy
         run: |
