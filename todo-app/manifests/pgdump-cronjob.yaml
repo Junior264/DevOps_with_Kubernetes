@@ -25,7 +25,8 @@ spec:
             args:
               - |
                 set -e
-                apk add --no-cache --repository=http://dl-cdn.alpinelinux.org postgresql18-client
+                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql18-client ||
+                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org postgresql17-client
                 
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
                 pg_dump -h postgres-svc -U postgres -d todo > /tmp/$FILENAME
