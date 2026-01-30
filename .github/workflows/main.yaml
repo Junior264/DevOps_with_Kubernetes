@@ -68,8 +68,8 @@ jobs:
 
       - name: Deploy
         run: |-
-          cd manifests
-          ustomize edit set image TODO_IMAGE=${{ env.FINAL_TAG_BACKEND }}
+          cd todo-app/manifests
+          kustomize edit set image TODO_IMAGE=${{ env.FINAL_TAG_BACKEND }}
           kustomize edit set image TODO_FRONTEND_IMAGE=${{ env.FINAL_TAG_FRONTEND }}
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.NAMESPACE }}
