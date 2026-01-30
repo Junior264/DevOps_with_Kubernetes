@@ -12,7 +12,7 @@ spec:
           restartPolicy: OnFailure
           containers:
           - name: backup-container
-            image: postgres:18
+            image: google/cloud-sdk:alpine
             env:
             - name: PGPASSWORD
               valueFrom:
@@ -22,6 +22,7 @@ spec:
             command: ["/bin/sh", "-c"]
             args:
               - |
+                apk add --no-cache --repository=https://dl-cdn.alpinelinux.org/alpine/edge/main postgresql18-client
                 FILENAME="backup-$(date +%Y-%m-%d_%H-%M).sql"
 
                 echo "Starting backup..."
