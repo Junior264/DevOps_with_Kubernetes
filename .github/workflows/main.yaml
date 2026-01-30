@@ -51,19 +51,15 @@ jobs:
 
       - name: Build and Publish Images
         run: |
-          # Tags definieren
           TAG_BACKEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_BACKEND }}:${{ github.sha }}
           TAG_FRONTEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_FRONTEND }}:${{ github.sha }}
           
-          # Backend bauen & pushen (Dockerfile im Root?)
-          docker build -t $TAG_BACKEND . 
+          docker build -t $TAG_BACKEND ./todo-app 
           docker push $TAG_BACKEND
           
-          # Frontend bauen & pushen (Ordner 'frontend' muss existieren!)
           docker build -t $TAG_FRONTEND ./frontend 
           docker push $TAG_FRONTEND
           
-          # Tags für Kustomize-Step speichern
           echo "FINAL_TAG_BACKEND=$TAG_BACKEND" >> $GITHUB_ENV
           echo "FINAL_TAG_FRONTEND=$TAG_FRONTEND" >> $GITHUB_ENV
 
