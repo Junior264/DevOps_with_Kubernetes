@@ -1,5 +1,9 @@
 package dev.ewald.todo_app.service;
 
+import io.nats.client.Connection;
+import io.nats.client.Nats;
+
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,7 @@ public class TodoService {
             todo.setName(name);
             
             todoRepository.save(todo);
+            notifyNats("A todo was created: " + name);
             log.info("Successfully saved todo: {}", todo);
         }
     }
@@ -40,6 +45,15 @@ public class TodoService {
         todo.setDone(!todo.isDone());
 
         todoRepository.save(todo);
+        notifyNats("A todo was updated" + todo.getName());
         log.info("Todo {} status changed to done: {}", id, todo.isDone());
+    }
+
+    public void notifyNats(String message) {
+        try (Connection nc = Nats.connect("nats://nats-svc:4222")) {
+            nc.publish("todo_events", message.getBytes(StandardCharsets.UTF_8));
+        } catch (Exception e) {
+            log.error("NATS error", e);
+        }
     }
 }

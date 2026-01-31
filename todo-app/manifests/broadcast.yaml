@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: broadcaster-dep
+  namespace: project
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: broadcaster
+  template:
+    metadata:
+      labels:
+        app: broadcaster
+    spec:
+      containers:
+        - name: broadcaster
+          image: junior246/broadcaster:latest
+          env:
+            - name: NATS_URL
+              value: "nats://my-nats:4222"
+            - name: GENERIC_URL
+              value: https://webhook.site/2769d5f8-6ddb-4b53-813a-2f138ffac97b
