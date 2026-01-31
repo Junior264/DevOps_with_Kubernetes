@@ -48,6 +48,7 @@ spec:
             mountPath: /usr/local/app/public/images
         - name: todo-app
           image: TODO_IMAGE
+          imagePullPolicy: Always
           ports: 
            - containerPort: 8080
           readinessProbe:

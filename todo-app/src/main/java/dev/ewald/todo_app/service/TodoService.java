@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import dev.ewald.todo_app.model.Todo;
@@ -18,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 public class TodoService {
     @Autowired
     private TodoRepository todoRepository;
+
+    @Value("${NATS_URL:nats://my-nats:4222}")
+    private String natsUrl;
 
     public List<Todo> getTodos() {
         return todoRepository.findAll();
@@ -50,7 +54,7 @@ public class TodoService {
     }
 
     public void notifyNats(String message) {
-        try (Connection nc = Nats.connect("nats://nats-svc:4222")) {
+        try (Connection nc = Nats.connect(natsUrl)) {
             nc.publish("todo_events", message.getBytes(StandardCharsets.UTF_8));
         } catch (Exception e) {
             log.error("NATS error", e);
