@@ -28,6 +28,12 @@ spec:
               - name: log-output-config
                 mountPath: /config
                 readOnly: true
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /
+              port: 8081
       volumes:
         - name: log-output-config
           configMap:
@@ -64,6 +70,12 @@ spec:
             - name: properties-config
               mountPath: "/config"
               readOnly: true
+          readinessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            httpGet:
+              path: /
+              port: 8080
       volumes:
         - name: properties-config
           configMap:
