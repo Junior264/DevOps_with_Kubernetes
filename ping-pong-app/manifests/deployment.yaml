@@ -44,13 +44,21 @@ spec:
 ---
 
 # Deployment Ping-Pong
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   namespace: exercises
-  name: ping-pong-dep
+  name: ping-pong-rollout
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    canary:
+      analysis:
+        templates:
+        - templateName: cpu-usage-check
+      steps:
+      - setWeight: 50
+      - pause: {duration: 5m}
   selector:
     matchLabels:
       app: ping-pong
@@ -61,7 +69,7 @@ spec:
     spec:
       containers:
         - name: ping-pong-app
-          image: junior246/ping_pong_app:latest
+          image: junior246/ping_pong_app:v2
           imagePullPolicy: Always
           env:
             - name: SPRING_CONFIG_LOCATION
