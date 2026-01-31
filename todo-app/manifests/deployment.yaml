@@ -64,6 +64,8 @@ spec:
               memory: "640Mi"
               cpu: "500m"
           env:
+            - name: NATS_URL
+              value: "nats://my-nats:4222"
             - name: SPRING_CONFIG_LOCATION
               value: "file:/config/application.properties"
             - name: DB_PASSWORD
