@@ -6,7 +6,10 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
       app: todo-app-fullstack
@@ -50,6 +53,12 @@ spec:
           image: TODO_IMAGE
           ports: 
            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
           resources:
             requests:
               memory: "384Mi"

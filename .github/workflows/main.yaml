@@ -48,17 +48,21 @@ jobs:
 
       - name: Build and Publish Images
         run: |
-          TAG_BACKEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_BACKEND }}:${{ github.sha }}
-          TAG_FRONTEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_FRONTEND }}:${{ github.sha }}
+          # Define paths
+          REPO_BACKEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_BACKEND }}
+          REPO_FRONTEND=${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE_FRONTEND }}
           
-          docker build -t $TAG_BACKEND ./todo-app 
-          docker push $TAG_BACKEND
+          # Backend: Build and Push with SHA and latest
+          docker build -t $REPO_BACKEND:${{ github.sha }} -t $REPO_BACKEND:latest ./todo-app 
+          docker push $REPO_BACKEND --all-tags
           
-          docker build -t $TAG_FRONTEND ./frontend 
-          docker push $TAG_FRONTEND
+          # Frontend: Build and Push with SHA and latest
+          docker build -t $REPO_FRONTEND:${{ github.sha }} -t $REPO_FRONTEND:latest ./frontend 
+          docker push $REPO_FRONTEND --all-tags
           
-          echo "FINAL_TAG_BACKEND=$TAG_BACKEND" >> $GITHUB_ENV
-          echo "FINAL_TAG_FRONTEND=$TAG_FRONTEND" >> $GITHUB_ENV
+          # Für Kustomize SHA-Tag save
+          echo "FINAL_TAG_BACKEND=$REPO_BACKEND:${{ github.sha }}" >> $GITHUB_ENV
+          echo "FINAL_TAG_FRONTEND=$REPO_FRONTEND:${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2.1.0
@@ -86,4 +90,4 @@ jobs:
           kustomize edit set image TODO_IMAGE=${{ env.FINAL_TAG_BACKEND }}
           kustomize edit set image TODO_FRONTEND_IMAGE=${{ env.FINAL_TAG_FRONTEND }}
           kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.NAMESPACE }}
+          kubectl rollout status deployment/${{ env.SERVICE }} -n ${{ env.NAMESPACE }} --timeout=120s
