@@ -33,4 +33,13 @@ public class TodoService {
             log.info("Successfully saved todo: {}", todo);
         }
     }
+
+    public void toggleDone(Long id) {
+        Todo todo = todoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Todo not found"));
+        todo.setDone(!todo.isDone());
+
+        todoRepository.save(todo);
+        log.info("Todo {} status changed to done: {}", id, todo.isDone());
+    }
 }

@@ -13,7 +13,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -34,5 +36,11 @@ public class TodoController {
     public void createTodo(@RequestBody String todo) {
         log.info("Received todo request: {}", todo);
         todoService.createTodo(todo);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void toggleTodo(@PathVariable Long id) {
+        todoService.toggleDone(id);
     }
 }

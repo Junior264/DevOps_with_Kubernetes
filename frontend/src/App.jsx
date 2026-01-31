@@ -63,6 +63,18 @@ const App = () => {
     }
   };
 
+  const handleToggleDone = (id) => {
+    fetch(`/todos/${id}`, {
+      method: "PUT",
+    })
+    .then(res => {
+      if (res.ok) {
+        fetchTodos();
+      }
+    })
+    .catch(err => console.error("Error updating todo:", err));
+  };
+
   return (
       <div>
     <h1>Welcome to the frontend :)</h1>
@@ -103,12 +115,30 @@ const App = () => {
       {todoText.length}/140 characters
     </div>
 
-    <ul>
-      {todos.map((todo) => (
-        <li key={todo.id} style={{padding: '10px 0', display: 'flex', alignItems: 'center'}}> {todo.name} </li>
+    <h3>To do</h3>
+    <ul style={{ listStyle: 'none', padding: 0 }}>
+      {todos.filter(t => !t.done).map((todo) => (
+        <li key={todo.id} style={{ padding: '10px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between' }}>
+          {todo.name}
+          <button 
+            onClick={() => handleToggleDone(todo.id)}
+            style={{ backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '3px', cursor: 'pointer' }}
+          >
+            Mark as done
+          </button>
+        </li>
       ))}
     </ul>
-  </div>
+
+      <h3 style={{ marginTop: '40px' }}>Done</h3>
+      <ul style={{ listStyle: 'none', padding: 0, opacity: 0.6 }}>
+        {todos.filter(t => t.done).map((todo) => (
+          <li key={todo.id} style={{ padding: '10px', textDecoration: 'line-through' }}>
+            {todo.name}
+          </li>
+        ))}
+      </ul>
+      </div>
   );
 };
 
